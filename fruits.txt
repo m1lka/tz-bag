@@ -1,0 +1,6 @@
+apple 15 45
+banana 10 67
+orange 18 80
+lemon 16 200
+limoni 22 55 ff
+cherry 5 53
