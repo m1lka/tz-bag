@@ -1,25 +1,24 @@
-#ifndef _FRUITBAGPROVIDER_H
-#define _FRUITBAGPROVIDER_H
+#pragma once
 
 #include "Fruit.h"
 #include "Services/IService.h"
+#include "FruitHelper/FruitHelper.h"
 
-class FruitBagProvider
+class FruitBagProvider: protected std::map<Fruit, int, FruitHelper::CompareByHash>
 {
 public:
     FruitBagProvider(IService* service);
     ~FruitBagProvider();
 	
-    void Add(std::string fruitName, int fruitCount);
-    void Remove(std::string fruitName, int fruitCount);
+    void Add(const std::string& fruitName, int fruitCount);
+    void Remove(const std::string& fruitName, int fruitCount);
     void Print();
 	
 private:
-    std::set<Fruit, FruitHelper::CompareByHash>* _fruitVariants;
-    std::map<Fruit, int, FruitHelper::CompareByHash> _bag;
+    FruitHelper::FruitVariant_type* _fruitVariants;
 	
-    std::set<Fruit, FruitHelper::CompareByHash>::iterator findFruitVariant(std::string& fruitName);
+    FruitHelper::FruitVariant_iterator findFruitVariant(const std::string& fruitName);
     void checkCount(int fruitCount);
-};
 
-#endif
+    FruitHelper::FruitVariant_iterator checkCountAndGetVariant(const std::string& fruitName, int fruitCount);
+};

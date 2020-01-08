@@ -1,5 +1,4 @@
-#ifndef _CONSOLE_H
-#define _CONSOLE_H
+#pragma once
 
 #include "helper.h"
 #include <stack>
@@ -64,5 +63,3 @@ private:
     void cmdPrint();
     void printHelp();
 };
-
-#endif

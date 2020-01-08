@@ -1,7 +1,6 @@
-#ifndef _ISERVICE_HPP
-#define _ISERVICE_HPP
+#pragma once
 
-#include "../Fruit.h"
+#include "../FruitHelper/FruitHelper.h"
 #include <set>
 #include <iostream>
 
@@ -11,14 +10,12 @@ public:
     IService(): _fruitVariant() {}
     virtual ~IService() {}
 
-    virtual std::set<Fruit, FruitHelper::CompareByHash>& GetFruitVariant()
+    virtual FruitHelper::FruitVariant_type& GetFruitVariant()
     {
         return this->_fruitVariant;
     }
     virtual void Load() = 0;
 
 protected:
-    std::set<Fruit, FruitHelper::CompareByHash> _fruitVariant;
+    FruitHelper::FruitVariant_type _fruitVariant;
 };
-
-#endif

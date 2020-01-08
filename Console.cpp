@@ -120,9 +120,9 @@ void Console::cmdRemove()
         is_letters(param1);
         is_digits(param2);
     }
-    catch (std::string &ex)
+    catch (std::logic_error &ex)
     {
-        cerr << "Invalid parameter value:\n\t" << ex << endl;
+        cerr << typeid(ex).name() << ":\tInvalid parameter value:\n\t" << ex.what() << endl;
         return;
     }
 

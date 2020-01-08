@@ -4,6 +4,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FruitHelper;
 
 FruitBagProvider::FruitBagProvider(IService* service):
     _fruitVariants(nullptr)
@@ -17,42 +18,39 @@ FruitBagProvider::~FruitBagProvider()
     _fruitVariants = nullptr;
 }
 
-void FruitBagProvider::Add(string fruitName, int fruitCount)
+void FruitBagProvider::Add(const string& fruitName, int fruitCount)
 {
-    set<Fruit, FruitHelper::CompareByHash>::iterator iterVar;
-
-    try {
-        iterVar = findFruitVariant(fruitName);
-        checkCount(fruitCount);
-    } catch (string& ex) {
-        cerr << ex << endl;
-        return;
-    }
-
-    auto iter = _bag.find(*iterVar);
-    if(iter != _bag.end())
-        iter->second += fruitCount;
-    else
-        _bag[*iterVar] = fruitCount;
-}
-
-void FruitBagProvider::Remove(string fruitName, int fruitCount)
-{
-    set<Fruit, FruitHelper::CompareByHash>::iterator iterVar;
+    FruitVariant_iterator iterVar;
 
     try
     {
-        iterVar = findFruitVariant(fruitName);
-        checkCount(fruitCount);
-    }
-    catch(string& ex)
+        iterVar = checkCountAndGetVariant(fruitName, fruitCount);
+    } catch (std::logic_error&)
     {
-        cerr << ex << endl;
         return;
     }
 
-    auto iter = _bag.find(*iterVar);
-    if(iter != _bag.end())
+    auto iter = find(*iterVar);
+    if(iter != this->end())
+        iter->second += fruitCount;
+    else
+        (*this)[*iterVar] = fruitCount;
+}
+
+void FruitBagProvider::Remove(const string& fruitName, int fruitCount)
+{
+    FruitVariant_iterator iterVar;
+
+    try
+    {
+        iterVar = checkCountAndGetVariant(fruitName, fruitCount);
+    } catch (std::logic_error&)
+    {
+        return;
+    }
+
+    auto iter = find(*iterVar);
+    if(iter != end())
     {
         int haveFruits = iter->second;
         if(haveFruits < fruitCount)
@@ -60,7 +58,7 @@ void FruitBagProvider::Remove(string fruitName, int fruitCount)
             cerr << "You are trying to remove too many \"" << fruitName << "\". There are only " << haveFruits << " fruits.\n";
         }
         else if(haveFruits == fruitCount)
-            _bag.erase(iter);
+            erase(iter);
         else
             iter->second -= fruitCount;
     }
@@ -76,7 +74,7 @@ void FruitBagProvider::Print()
 
     int totalWeight = 0, totalPrice = 0;
 
-    for(auto cell: _bag)
+    for(auto cell: (*this))
     {
         Fruit fruit;
         int totalWeightLine = 0, totalPriceLine = 0;
@@ -104,18 +102,30 @@ void FruitBagProvider::checkCount(int fruitCount)
     {
         stringstream error;
         error << "Count couldn't be <= 0 (is " << fruitCount << ")";
-        throw error.str();
+        throw std::logic_error(error.str());
     }
 }
 
-set<Fruit, FruitHelper::CompareByHash>::iterator FruitBagProvider::findFruitVariant(string& fruitName)
+FruitHelper::FruitVariant_iterator FruitBagProvider::findFruitVariant(const string& fruitName)
 {
     Fruit fruit(fruitName);
 
     auto iterVar = _fruitVariants->find(fruit);
     if(iterVar == _fruitVariants->end())
     {
-        throw string("Fruit \'" + fruitName + "\' not found.");
+        throw std::logic_error("Fruit \'" + fruitName + "\' not found.");
     }
     return iterVar;
+}
+
+FruitHelper::FruitVariant_iterator FruitBagProvider::checkCountAndGetVariant(const std::string& fruitName, int fruitCount)
+{
+    try {
+        auto iterVar = findFruitVariant(fruitName);
+        checkCount(fruitCount);
+        return iterVar;
+    } catch (std::logic_error& ex) {
+        cerr << typeid (ex).name() << ":\t" << ex.what() << endl;
+        throw;
+    }
 }

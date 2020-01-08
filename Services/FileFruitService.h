@@ -1,5 +1,4 @@
-#ifndef _FILEFRUITSERVICE_HPP
-#define _FILEFRUITSERVICE_HPP
+#pragma once
 
 #include "IService.h"
 
@@ -14,7 +13,5 @@ public:
 private:
     std::string _path;
 
-    bool checkParam(std::string& name, std::string& weight, std::string& price);
+    bool checkParam(const std::string& name, const std::string& weight, const std::string& price);
 };
-
-#endif

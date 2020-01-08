@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(tz-bag)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 SET(TARGET_SRC main.cpp)
 
 SET(HEADERS ./Fruit.h
+            ./FruitHelper/FruitHelper.h
             ./FruitBagProvider.h
             ./helper.h
             ./Console.h

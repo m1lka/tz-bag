@@ -3,6 +3,8 @@
 #include <sstream>
 #include <functional>
 
+#include "FruitHelper/FruitHelper.h"
+
 using namespace std;
 
 Fruit::Fruit():
@@ -35,7 +37,7 @@ Fruit& Fruit::SetWeight(int weight)
     {
         stringstream error;
         error << "Weight couldn't be <= 0 (is " << weight << ")";
-        throw error.str();
+        throw std::logic_error(error.str());
     }
 
     _weight = weight;
@@ -49,7 +51,7 @@ Fruit& Fruit::SetPrice(int price)
     {
         stringstream error;
         error << "Price couldn't be < 0 (is " << price << ")";
-        throw error.str();
+        throw std::logic_error(error.str());
     }
 
     _price = price;

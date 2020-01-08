@@ -20,9 +20,7 @@ void FileFruitService::Load()
 
     file.open(_path, ios::in);
     if(!file.is_open())
-    {
-        throw string("File " + _path + " is not open");
-    }
+        throw std::runtime_error("File " + _path + " is not open");
 
     string fruitLine;
     int numberLine = 0;
@@ -64,13 +62,14 @@ void FileFruitService::Load()
             auto result = _fruitVariant.insert(fruit);
             if(result.second == false)
             {
-                throw string("The fruit has not been added to the list of possible fruit variants");
+                throw std::runtime_error("The fruit has not been added to the list of possible fruit variants");
             }
         }
-        catch(string &ex)
+        catch(std::exception &ex)
         {
             cerr << "Error in line " << numberLine << " with " << name << ":" << endl;
-            cerr << "\t" << ex << ". \n\tThe string will not be processed." << endl; cerr .flush();
+            cerr << typeid(ex).name() << ":\t" << ex.what() << ". \n\tThe string will not be processed." << endl;
+            cerr .flush();
         }
     }
     cerr << "\n";
@@ -78,7 +77,7 @@ void FileFruitService::Load()
 	cerr << "[INFO] Load fruits from file: " << _path << " OK." << endl;
 }
 
-bool FileFruitService::checkParam(string& name, string& weight , string& price)
+bool FileFruitService::checkParam(const string& name, const string& weight , const string& price)
 {
     if(weight.empty())
     {
@@ -96,9 +95,9 @@ bool FileFruitService::checkParam(string& name, string& weight , string& price)
         is_digits(weight);
         is_digits(price);
     }
-    catch (string &ex)
+    catch (std::logic_error &ex)
     {
-        cerr << "Invalid fruit parameter value:\n\t" << ex << endl;
+        cerr << typeid (ex).name() << ":\tInvalid fruit parameter value:\n\t" << ex.what() << endl;
         return false;
     }
     return true;

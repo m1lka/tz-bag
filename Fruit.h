@@ -1,14 +1,7 @@
-#ifndef _FRUIT_H
-#define _FRUIT_H
+#pragma once
 
 #include <string>
 #include <map>
-
-namespace FruitHelper {
-    static std::hash<std::string> HashString;
-
-    struct CompareByHash;
-}
 
 class Fruit
 {
@@ -33,17 +26,3 @@ private:
 	
     size_t _hashName;
 };
-
-namespace FruitHelper {
-
-    struct CompareByHash
-    {
-        bool operator()(const Fruit& left, const Fruit& right)
-        {
-            return (left.GetHashName() < right.GetHashName());
-        }
-    };
-
-}
-
-#endif

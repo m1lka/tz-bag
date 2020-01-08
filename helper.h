@@ -1,19 +1,17 @@
-#ifndef _HELPER_H
-#define _HELPER_H
+#pragma once
 
 #include <algorithm>
 #include <string>
+#include <stdexcept>
 
-inline void is_digits(std::string &s)
+inline void is_digits(const std::string &s)
 {
     if(s.find_first_not_of("-.0123456789") != std::string::npos)
-        throw std::string("The parameter \'" + s + "\' must contain only digits");
+        throw std::logic_error("The parameter \'" + s + "\' must contain only digits");
 }
 
-inline void is_letters(std::string &s)
+inline void is_letters(const std::string &s)
 {
     if(!std::all_of(s.begin(), s.end(), ::isalpha))
-        throw std::string("The parameter \'" + s + "\' must contain only letters");
+        throw std::logic_error("The parameter \'" + s + "\' must contain only letters");
 }
-
-#endif
